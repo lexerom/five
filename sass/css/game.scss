@@ -1,0 +1,330 @@
+$card-stack-margin: 25px;
+.hidden {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+}
+
+button#end-turn {
+  background: url(../img/button-end.png) no-repeat;
+  width: 128px;
+  height: 128px;
+  border: none;
+  color: #fff;
+  opacity: 0.5;
+  margin-top: 30px;
+  &:hover {
+    font-size: 16px;
+  }
+  &.active {
+    opacity: 1;
+  }
+}
+
+.library .content {
+  background: url(../img/cardback.jpg) no-repeat;
+  background-size: cover;
+  color: #fff;
+  width: 40px;
+  height: 80px;
+  margin: 10px;
+  padding: 10px;
+  border: 3px solid #aaa;
+  border-radius: 6px;
+  font-size: 30px;
+}
+
+.card {
+  margin: 10px;
+  border: 3px solid #000;
+  color: #fff;
+  width: 60px;
+  height: 100px;
+  border-radius: 6px;
+  &.fog {
+    opacity: 0.2;
+  }
+  &.highlight {
+    border-color: #ff0000 !important;
+  }
+  &.unknown {
+    color: #000;
+    font-size: 10px;
+    background: url(../img/cardback.jpg) no-repeat;
+    background-size: cover;
+  }
+  &.selected {
+    border-color: #999;
+  }
+  &.type-1 {
+    //background-color: #ffe87c;
+    background: url(../img/plains.jpg) no-repeat;
+    background-size: cover;
+    color: #000;
+  }
+
+  &.type-2 {
+    //background-color: #219161;
+    background: url(../img/forest.jpg) no-repeat;
+    background-size: cover;
+  }
+
+  &.type-3 {
+    //background-color: #B94A48;
+    background: url(../img/mountain.jpg) no-repeat;
+    background-size: cover;
+  }
+
+  &.type-4 {
+    //background-color: #555;
+    background: url(../img/swamp.jpg) no-repeat;
+    background-size: cover;
+  }
+
+  &.type-5 {
+    //background-color: #0b97c4;
+    background: url(../img/island.jpg) no-repeat;
+    background-size: cover;
+  }
+}
+
+.card {
+  &.index-0 {
+    top: $card-stack-margin * 0;
+  }
+  &.index-1 {
+    top: $card-stack-margin * 1;
+  }
+  &.index-2 {
+    top: $card-stack-margin * 2;
+  }
+  &.index-3 {
+    top: $card-stack-margin * 3;
+  }
+  &.index-4 {
+    top: $card-stack-margin * 4;
+  }
+  &.index-5 {
+    top: $card-stack-margin * 5;
+  }
+  &.index-6 {
+    top: $card-stack-margin * 6;
+  }
+  &.index-7 {
+    top: $card-stack-margin * 7;
+  }
+  &.index-8 {
+    top: $card-stack-margin * 8;
+  }
+  &.index-9 {
+    top: $card-stack-margin * 9;
+  }
+  &.index-10 {
+    top: $card-stack-margin * 10;
+  }
+  &.index-11 {
+    top: $card-stack-margin * 11;
+  }
+  &.index-12 {
+    top: $card-stack-margin * 12;
+  }
+  &.index-13 {
+    top: $card-stack-margin * 13;
+  }
+  &.index-14 {
+    top: $card-stack-margin * 14;
+  }
+  &.index-15 {
+    top: $card-stack-margin * 15;
+  }
+  &.index-16 {
+    top: $card-stack-margin * 16;
+  }
+  &.index-17 {
+    top: $card-stack-margin * 17;
+  }
+  &.index-18 {
+    top: $card-stack-margin * 18;
+  }
+  &.index-19 {
+    top: $card-stack-margin * 19;
+  }
+  &.index-20 {
+    top: $card-stack-margin * 20;
+  }
+  &.index-21 {
+    top: $card-stack-margin * 21;
+  }
+  &.index-22 {
+    top: $card-stack-margin * 22;
+  }
+  &.index-23 {
+    top: $card-stack-margin * 23;
+  }
+  &.index-24 {
+    top: $card-stack-margin * 24;
+  }
+  &.index-25 {
+    top: $card-stack-margin * 25;
+  }
+  &.index-26 {
+    top: $card-stack-margin * 26;
+  }
+  &.index-27 {
+    top: $card-stack-margin * 27;
+  }
+  &.index-28 {
+    top: $card-stack-margin * 28;
+  }
+  &.index-29 {
+    top: $card-stack-margin * 29;
+  }
+  &.index-30 {
+    top: $card-stack-margin * 30;
+  }
+  &.index-31 {
+    top: $card-stack-margin * 31;
+  }
+  &.index-32 {
+    top: $card-stack-margin * 32;
+  }
+  &.index-33 {
+    top: $card-stack-margin * 33;
+  }
+  &.index-34 {
+    top: $card-stack-margin * 34;
+  }
+  &.index-35 {
+    top: $card-stack-margin * 35;
+  }
+  &.index-36 {
+    top: $card-stack-margin * 36;
+  }
+  &.index-37 {
+    top: $card-stack-margin * 37;
+  }
+  &.index-38 {
+    top: $card-stack-margin * 38;
+  }
+  &.index-39 {
+    top: $card-stack-margin * 39;
+  }
+
+  &.index-40 {
+    top: $card-stack-margin * 40;
+  }
+  &.index-41 {
+    top: $card-stack-margin * 41;
+  }
+  &.index-42 {
+    top: $card-stack-margin * 42;
+  }
+  &.index-43 {
+    top: $card-stack-margin * 43;
+  }
+  &.index-44 {
+    top: $card-stack-margin * 44;
+  }
+  &.index-45 {
+    top: $card-stack-margin * 45;
+  }
+  &.index-46 {
+    top: $card-stack-margin * 46;
+  }
+  &.index-47 {
+    top: $card-stack-margin * 47;
+  }
+  &.index-48 {
+    top: $card-stack-margin * 48;
+  }
+  &.index-49 {
+    top: $card-stack-margin * 49;
+  }
+  &.index-50 {
+    top: $card-stack-margin * 50;
+  }
+}
+
+#game {
+  width: 100%;
+  height: 800px;
+  .card {
+    float: left;
+  }
+  #left {
+    -moz-user-select     : none;
+    -khtml-user-select   : none;
+    -webkit-user-select  : none;
+    -o-user-select       : none;
+    user-select          : none;
+    width: 79%;
+    float: left;
+    height: 100%;
+    .player {
+      height: 50%;
+      width: 100%;
+      &#player-top {
+        border-bottom: 5px solid #fff;
+      }
+      .table {
+        width: 80%;
+        float: left;
+        height: 250px;
+        background: url(../img/bg-board.jpg) repeat-x;
+        .card {
+          border-color: #F5F5FF;
+        }
+      }
+      .hand {
+        width: 80%;
+        float: left;
+        height: 125px;
+        background: #C09853;
+      }
+      .cardpiles {
+        height: 100%;
+        width: 19%;
+        float: left;
+        .library, .graveyard {
+          height: 30%;
+          &.graveyard {
+            height: 65%;
+            position: relative;
+            overflow: hidden;
+            overflow-y: auto;
+            .card {
+              float: none;
+              position: absolute;
+            }
+          }
+        }
+      }
+    }
+  }
+  #right {
+    float: left;
+    width: 19%;
+    height: 100%;
+    .yes, .no {
+      margin-left: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      border: 2px solid #000066;
+      padding: 0px 5px;
+    }
+    .card {
+      float: none;
+    }
+    #stack {
+      margin-top: 50px;
+    }
+    #log {
+      height: 200px;
+      .content {
+        overflow: hidden;
+        overflow-y: auto;
+        height: 100%;
+      }
+    }
+  }
+}

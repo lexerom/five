@@ -1,0 +1,77 @@
+extends layout
+
+block content
+    div#template-stack-helper.hidden
+        div Do you want to allow this card?
+            span.yes Yes
+            span.no No
+    div#template-stack-helper-counter.hidden
+        div Discard card #2 and card with the same type of played card or
+            span.yes Allow
+    div#template-stack-helper-counter-error.hidden
+        div You do not have valid cards to counter played card. Click
+            span.yes Yes
+            |  to allow
+    div#template-stack-helper-waiting.hidden
+        div Waiting for your opponent...
+    div#template-trigger-helper-return.hidden
+        div Select card in your graveyard to return
+    div#template-trigger-helper-destroy.hidden
+        div Select card on your opponent's table to destroy
+    div#template-trigger-helper-discard.hidden
+        div Select card in your hand to discard
+    div#template-trigger-helper-discard-select.hidden
+        div Select card in your opponent's hand to discard
+    div#template-cleanup-helper.hidden
+        div Your maximum hand size is 7. Double click on cards to discard.
+    div#template-card.hidden
+        div(class="card type-{{type}} index-{{index}}", data-id="{{id}}")
+    div#template-back-card.hidden
+        div(class="card unknown")
+    div#game
+        div#left
+            div#player-top.player
+                .cardpiles
+                    .library
+                        .content
+                    .graveyard
+                        .content
+                .hand
+                    .content
+                .table
+                    .content
+            div#player-bottom.player
+                .cardpiles
+                    .library
+                        .content
+                    .graveyard
+                        .content
+                .table
+                    .content
+                .hand
+                    .content
+                .clearfix
+        div#right
+            div#log
+                div.title Log
+                div.content
+            button#end-turn End your turn
+            div#stack
+                div.title
+                div.content
+                div.helper
+                div.counter
+
+    script(type="text/javascript", src="/socket.io/socket.io.js")
+    script(type="text/javascript", src="//code.jquery.com/jquery-1.11.1.js")
+    script(src="/js/client.js")
+    script(src="/js/fastclick.js")
+    script(src="/js/mustache.js")
+    script.
+        $(function() {
+            FastClick.attach(document.body);
+            window.Client({
+                gameId : "#{gameId}",
+                playerId : "#{playerId}"
+            });
+        });

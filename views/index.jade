@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    .container
+        h1 Five Multiplayer Card Game
+        p Home Page
+        if playerId
+            div
+                a(href="/start") Start new game
+            ul
+              each item in list
+                li
+                    a(href='/join?gameId=' + item.gameId) Player #{item.title} - Game #{item.gameId} #{item.busy}/#{item.total}
+        else
+            form(method="POST")
+                input(type="number", name="id")
+                input(type="submit", value="Set ID")
+
+
