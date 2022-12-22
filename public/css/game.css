@@ -1,7 +1,8 @@
 .hidden {
   display: none;
   visibility: hidden;
-  opacity: 0; }
+  opacity: 0;
+}
 
 button#end-turn {
   background: url(../img/button-end.png) no-repeat;
@@ -10,11 +11,15 @@ button#end-turn {
   border: none;
   color: #fff;
   opacity: 0.5;
-  margin-top: 30px; }
-  button#end-turn:hover {
-    font-size: 16px; }
-  button#end-turn.active {
-    opacity: 1; }
+  margin-top: 30px;
+  cursor: pointer;
+}
+button#end-turn:hover {
+  font-size: 16px;
+}
+button#end-turn.active {
+  opacity: 1;
+}
 
 .library .content {
   background: url(../img/cardback.jpg) no-repeat;
@@ -26,7 +31,8 @@ button#end-turn {
   padding: 10px;
   border: 3px solid #aaa;
   border-radius: 6px;
-  font-size: 30px; }
+  font-size: 30px;
+}
 
 .card {
   margin: 10px;
@@ -34,114 +40,281 @@ button#end-turn {
   color: #fff;
   width: 60px;
   height: 100px;
-  border-radius: 6px; }
-  .card.fog {
-    opacity: 0.2; }
-  .card.highlight {
-    border-color: #ff0000 !important; }
-  .card.unknown {
-    color: #000;
-    font-size: 10px;
-    background: url(../img/cardback.jpg) no-repeat;
-    background-size: cover; }
-  .card.selected {
-    border-color: #999; }
-  .card.type-1 {
-    background: url(../img/plains.jpg) no-repeat;
-    background-size: cover;
-    color: #000; }
-  .card.type-2 {
-    background: url(../img/forest.jpg) no-repeat;
-    background-size: cover; }
-  .card.type-3 {
-    background: url(../img/mountain.jpg) no-repeat;
-    background-size: cover; }
-  .card.type-4 {
-    background: url(../img/swamp.jpg) no-repeat;
-    background-size: cover; }
-  .card.type-5 {
-    background: url(../img/island.jpg) no-repeat;
-    background-size: cover; }
+  border-radius: 6px;
+}
+.card.fog {
+  opacity: 0.2;
+}
+.card.highlight {
+  border-color: #ff0000 !important;
+}
+.card.unknown {
+  color: #000;
+  font-size: 10px;
+  background: url(../img/cardback.jpg) no-repeat;
+  background-size: cover;
+}
+.card.selected {
+  border-color: #999;
+}
+.card.type-1 {
+  background: url(../img/plains.jpg) no-repeat;
+  background-size: cover;
+  color: #000;
+}
+.card.type-2 {
+  background: url(../img/forest.jpg) no-repeat;
+  background-size: cover;
+}
+.card.type-3 {
+  background: url(../img/mountain.jpg) no-repeat;
+  background-size: cover;
+}
+.card.type-4 {
+  background: url(../img/swamp.jpg) no-repeat;
+  background-size: cover;
+}
+.card.type-5 {
+  background: url(../img/island.jpg) no-repeat;
+  background-size: cover;
+}
 
 .card.index-0 {
-  top: 0px; }
+  top: 0px;
+}
 .card.index-1 {
-  top: 25px; }
+  top: 25px;
+}
 .card.index-2 {
-  top: 50px; }
+  top: 50px;
+}
 .card.index-3 {
-  top: 75px; }
+  top: 75px;
+}
 .card.index-4 {
-  top: 100px; }
+  top: 100px;
+}
 .card.index-5 {
-  top: 125px; }
+  top: 125px;
+}
 .card.index-6 {
-  top: 150px; }
+  top: 150px;
+}
 .card.index-7 {
-  top: 175px; }
+  top: 175px;
+}
+.card.index-8 {
+  top: 200px;
+}
+.card.index-9 {
+  top: 225px;
+}
+.card.index-10 {
+  top: 250px;
+}
+.card.index-11 {
+  top: 275px;
+}
+.card.index-12 {
+  top: 300px;
+}
+.card.index-13 {
+  top: 325px;
+}
+.card.index-14 {
+  top: 350px;
+}
+.card.index-15 {
+  top: 375px;
+}
+.card.index-16 {
+  top: 400px;
+}
+.card.index-17 {
+  top: 425px;
+}
+.card.index-18 {
+  top: 450px;
+}
+.card.index-19 {
+  top: 475px;
+}
+.card.index-20 {
+  top: 500px;
+}
+.card.index-21 {
+  top: 525px;
+}
+.card.index-22 {
+  top: 550px;
+}
+.card.index-23 {
+  top: 575px;
+}
+.card.index-24 {
+  top: 600px;
+}
+.card.index-25 {
+  top: 625px;
+}
+.card.index-26 {
+  top: 650px;
+}
+.card.index-27 {
+  top: 675px;
+}
+.card.index-28 {
+  top: 700px;
+}
+.card.index-29 {
+  top: 725px;
+}
+.card.index-30 {
+  top: 750px;
+}
+.card.index-31 {
+  top: 775px;
+}
+.card.index-32 {
+  top: 800px;
+}
+.card.index-33 {
+  top: 825px;
+}
+.card.index-34 {
+  top: 850px;
+}
+.card.index-35 {
+  top: 875px;
+}
+.card.index-36 {
+  top: 900px;
+}
+.card.index-37 {
+  top: 925px;
+}
+.card.index-38 {
+  top: 950px;
+}
+.card.index-39 {
+  top: 975px;
+}
+.card.index-40 {
+  top: 1000px;
+}
+.card.index-41 {
+  top: 1025px;
+}
+.card.index-42 {
+  top: 1050px;
+}
+.card.index-43 {
+  top: 1075px;
+}
+.card.index-44 {
+  top: 1100px;
+}
+.card.index-45 {
+  top: 1125px;
+}
+.card.index-46 {
+  top: 1150px;
+}
+.card.index-47 {
+  top: 1175px;
+}
+.card.index-48 {
+  top: 1200px;
+}
+.card.index-49 {
+  top: 1225px;
+}
+.card.index-50 {
+  top: 1250px;
+}
 
 #game {
   width: 100%;
-  height: 800px; }
-  #game .card {
-    float: left; }
-  #game #left {
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-    width: 79%;
-    float: left;
-    height: 100%; }
-    #game #left .player {
-      height: 50%;
-      width: 100%; }
-      #game #left .player#player-top {
-        border-bottom: 5px solid #fff; }
-      #game #left .player .table {
-        width: 80%;
-        float: left;
-        height: 250px;
-        background: url(../img/bg-board.jpg) repeat-x; }
-        #game #left .player .table .card {
-          border-color: #F5F5FF; }
-      #game #left .player .hand {
-        width: 80%;
-        float: left;
-        height: 125px;
-        background: #C09853; }
-      #game #left .player .cardpiles {
-        height: 100%;
-        width: 19%;
-        float: left; }
-        #game #left .player .cardpiles .library, #game #left .player .cardpiles .graveyard {
-          height: 30%; }
-          #game #left .player .cardpiles .library.graveyard, #game #left .player .cardpiles .graveyard.graveyard {
-            height: 65%;
-            position: relative;
-            overflow: hidden;
-            overflow-y: auto; }
-            #game #left .player .cardpiles .library.graveyard .card, #game #left .player .cardpiles .graveyard.graveyard .card {
-              float: none;
-              position: absolute; }
-  #game #right {
-    float: left;
-    width: 19%;
-    height: 100%; }
-    #game #right .yes, #game #right .no {
-      margin-left: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      border: 2px solid #000066;
-      padding: 0px 5px; }
-    #game #right .card {
-      float: none; }
-    #game #right #stack {
-      margin-top: 50px; }
-    #game #right #log {
-      height: 200px; }
-      #game #right #log .content {
-        overflow: hidden;
-        overflow-y: auto;
-        height: 100%; }
+  height: 800px;
+}
+#game .card {
+  float: left;
+}
+#game #left {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  width: 79%;
+  float: left;
+  height: 100%;
+}
+#game #left .player {
+  height: 50%;
+  width: 100%;
+}
+#game #left .player#player-top {
+  border-bottom: 5px solid #fff;
+}
+#game #left .player .table {
+  width: 80%;
+  float: left;
+  height: 250px;
+  background: url(../img/bg-board.jpg) repeat-x;
+}
+#game #left .player .table .card {
+  border-color: #F5F5FF;
+}
+#game #left .player .hand {
+  width: 80%;
+  float: left;
+  height: 125px;
+  background: #C09853;
+}
+#game #left .player .cardpiles {
+  height: 100%;
+  width: 19%;
+  float: left;
+}
+#game #left .player .cardpiles .library, #game #left .player .cardpiles .graveyard {
+  height: 30%;
+}
+#game #left .player .cardpiles .library.graveyard, #game #left .player .cardpiles .graveyard.graveyard {
+  height: 65%;
+  position: relative;
+  overflow: hidden;
+  overflow-y: auto;
+}
+#game #left .player .cardpiles .library.graveyard .card, #game #left .player .cardpiles .graveyard.graveyard .card {
+  float: none;
+  position: absolute;
+}
+#game #right {
+  float: left;
+  width: 19%;
+  height: 100%;
+}
+#game #right .yes, #game #right .no {
+  margin-left: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid #000066;
+  padding: 0px 5px;
+}
+#game #right .card {
+  float: none;
+}
+#game #right #stack {
+  margin-top: 50px;
+}
+#game #right #log {
+  height: 200px;
+}
+#game #right #log .content {
+  overflow: hidden;
+  overflow-y: auto;
+  height: 100%;
+}
+
+/*# sourceMappingURL=game.css.map */

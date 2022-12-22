@@ -1,20 +1,27 @@
 {
   "name": "Five",
   "description": "Five Card Multiplayer Game",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "body-parser": "1.6.1",
-    "connect-redis": "2.0.0",
-    "cookie-parser": "1.3.2",
-    "express": "4.6.1",
-    "express-session": "1.7.4",
-    "jade": "1.5.0",
+    "body-parser": "^1.20.1",
+    "connect-redis": "6.1.3",
+    "cookie-parser": "1.4.6",
+    "dotenv": "16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "pug": "^3.0.2",
     "path": "0.4.9",
+    "redis": "^4.5.1",
+    "sass": "1.57.1",
     "shortid": "2.0.1",
-    "socket.io": "1.0.6",
-    "underscore": "1.6.0",
-    "util": "0.10.3",
-    "node-sass": "3.8.0"
+    "socket.io": "^4.5.4",
+    "underscore": "1.13.6",
+    "util": "0.10.3"
+  },
+  "scripts": {
+    "start": "node .",
+    "dev": "npm run scss",
+    "scss": "sass --watch sass/css/game.scss public/css/game.css"
   }
 }

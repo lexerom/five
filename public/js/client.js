@@ -132,7 +132,7 @@ var Client = (function(window) {
             update();
         });
 
-        socket.on('disconnect', function(data) {
+        socket.on('close', function(data) {
            console.log(data + ' disconnected. Waiting for reconnect');
         });
     }
