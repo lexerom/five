@@ -1,6 +1,6 @@
 Run these commands 
 ```
 npm install
-npm run start
+npm run dev
 ```
 Open http://127.0.0.1:8080
