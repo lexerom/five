@@ -92,12 +92,12 @@ var action = function(data) {
     updateGame(game, IO.sockets.in(sess.gameId));
 }
 
-var disconnect = function() {
-    console.log('disconnect');
+var close = function() {
+    console.log('close');
     var sess = this.handshake.session;
     var debugInfo = {
         socketID : this.id,
-        event : 'disconnect',
+        event : 'close',
         session : sess
     };
 
@@ -116,7 +116,7 @@ var disconnect = function() {
         return;
     }
 
-    IO.sockets.in(sess.gameId).emit('disconnect', sess.playerId);
+    IO.sockets.in(sess.gameId).emit('close', sess.playerId);
     console.log(sess.playerId + ' left ' + sess.gameId);
     console.log('Socket ' + this.id + ' disconnected');
 }
@@ -128,7 +128,7 @@ exports.attach = function(io, db) {
     IO.on('connection', function(socket) {
         socket.on('join', join);
         socket.on('action', action);
-        socket.on('disconnect', disconnect);
+        socket.on('close', close);
 
         console.log('Socket ' + socket.id + ' connected');
     });

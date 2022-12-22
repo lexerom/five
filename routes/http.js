@@ -62,7 +62,7 @@ function validateGame(req) {
     };
 }
 
-function home(req, res) {    
+function home(req, res) {
     if (!req.session.playerId && req.method === 'POST' && req.body.id) {
         req.session.playerId = req.body.id;
         res.redirect('/');
@@ -137,6 +137,12 @@ function game(req, res) {
     res.render('game', validData);
 }
 
+function logout(req, res) {
+    req.session.destroy();
+    res.redirect('/');
+    return;
+}
+
 function invalid(req, res) {
     res.redirect('/');
 }
@@ -149,5 +155,6 @@ exports.attach = function(app, db) {
     app.get('/start', startGame);
     app.get('/game/:id', game)
     app.get('/join', joinGame);
+    app.get('/logout', logout);
     app.all('*', invalid);
 }
