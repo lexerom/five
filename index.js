@@ -8,47 +8,43 @@ const path = require('path'),
     express = require('express'),
     session = require('express-session'),
     bodyParser = require('body-parser'),
-    cookieParser = require('cookie-parser'),
     socket = require('socket.io'),
     httpRoutes = require('./routes/http'),
-    socketRoutes = require('./routes/socket');
+    socketRoutes = require('./routes/socket'),
+    redis = require("redis");
 
-let RedisStore = require('connect-redis')(session),
+const RedisStore = require('connect-redis')(session),
     GameStore = require('./lib/GameStore');
 
-const { createClient } = require("redis")
-let redisClient = createClient({ legacyMode: true })
+const redisClient = redis.createClient({legacyMode: true});
+redisClient.on("error", (err) => console.log(err));
 redisClient.connect().catch(console.error)
 
 const app = express(),
     server = http.createServer(app),
-    io = socket(server),
+    io = new socket.Server(server),
     db = new GameStore();
 
 //Settings
 app.set('port', process.env.app_port || 8080);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
-const secretKey = process.env.session_secret;
 
 const sessionStore = new RedisStore({client: redisClient});
-const cp = cookieParser(secretKey);
 const sessionInstance = session({
-    secret: secretKey,
+    secret: process.env.session_secret,
     store: sessionStore,
-    parser: cp,
     resave: false,
     saveUninitialized: true
 });
 app.use(sessionInstance);
 app.use(bodyParser.urlencoded({extended: null}));
-app.use(cp);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 const allowCrossDomain = function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost" || "http://127.0.0.1");
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.header("Access-Control-Allow-Methods", "GET,POST");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     res.header("Access-Control-Allow-Credentials", "true");
     next();
@@ -56,29 +52,9 @@ const allowCrossDomain = function (req, res, next) {
 
 app.use(allowCrossDomain);
 
-io.use(function (socket, next) {
-    const handshake = socket.handshake;
-    if (handshake.headers.cookie) {
-        cookieParser()(handshake, {}, function (err) {
-            handshake.sessionID = cookieParser.signedCookie(handshake.cookies['connect.sid'], secretKey);
-            handshake.sessionStore = sessionStore;
-            handshake.sessionStore.get(handshake.sessionID, function (err, data) {
-                if (err) {
-                    return next(err);
-                }
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
-                if (!data) {
-                    return next(new Error('Invalid Session'));
-                }
-
-                handshake.session = new session.Session(handshake, data);
-                next();
-            });
-        });
-    } else {
-        next(new Error('Missing Cookies'));
-    }
-});
+io.use(wrap(sessionInstance));
 
 httpRoutes.attach(app, db);
 socketRoutes.attach(io, db);

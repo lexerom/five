@@ -1,15 +1,16 @@
 /**
  * Created by alex on 8/7/14.
  */
-var _ = require('underscore'),
+const _ = require('underscore'),
     Game = require('../lib/Game');
 
-var IO = null,
+let IO = null,
     DB = null;
 
-var join = function(gameId) {
-    console.log('trying to join game', gameId)
-    var sess = this.handshake.session;
+const join = function(gameId) {
+    console.log('Trying to join game', gameId);
+
+    var sess = this.request.session;
     var debugInfo = {
         socketID : this.id,
         event : 'join',
@@ -43,14 +44,15 @@ var join = function(gameId) {
     if (game.status === 'ongoing') {
         var sockets = IO.sockets.in(gameId);
         sockets.emit('start', game.getPublicInfo());
-        updateSocketsPrivateInfo(game, sockets);
-        updateGame(game, sockets);
+        updateSocketsPrivateInfo(game, sockets).then(() => updateGame(game, sockets));
     }
 }
 
-var updateSocketsPrivateInfo = function(game, sockets) {
-    for (var i in sockets.sockets) {
-        sockets.sockets[i].emit('update player', game.getPlayerInfo(sockets.sockets[i].handshake.session.playerId));
+const updateSocketsPrivateInfo = async function(game, sockets) {
+    const roomSockets = await sockets.fetchSockets();
+    for (let i in roomSockets) {
+        console.log('Update player: ' + roomSockets[i].request.session.playerId);
+        roomSockets[i].emit('update player', game.getPlayerInfo(roomSockets[i].request.session.playerId));
     }
 }
 
@@ -59,14 +61,14 @@ var updateGame = function(game, sockets) {
 }
 
 var action = function(data) {
-    var sess = this.handshake.session;
+    var sess = this.request.session;
     var debugInfo = {
         socketID : this.id,
         event : 'action',
         session : sess
     };
 
-    var game = DB.find(sess.gameId);
+    const game = DB.find(sess.gameId);
     if (!game) {
         console.log('ERROR: Game Not Found', debugInfo);
         this.emit('error', {message: "Game not found"});
@@ -94,7 +96,7 @@ var action = function(data) {
 
 var close = function() {
     console.log('close');
-    var sess = this.handshake.session;
+    var sess = this.request.session;
     var debugInfo = {
         socketID : this.id,
         event : 'close',
