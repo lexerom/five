@@ -1,35 +1,35 @@
-/**
- * Created by alex on 7/25/14.
- */
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-const path = require('path'),
-    http = require('http'),
-    express = require('express'),
-    session = require('express-session'),
-    bodyParser = require('body-parser'),
-    socket = require('socket.io'),
-    httpRoutes = require('./routes/http'),
-    socketRoutes = require('./routes/socket'),
-    redis = require("redis");
+import path from 'path';
+import { createServer as createHttpServer } from 'http';
+import express from 'express';
+import session from 'express-session';
+import bodyParser from 'body-parser';
+import { Server as SocketServer } from 'socket.io';
+import httpRoutes from './routes/http.js';
+import socketRoutes from './routes/socket.js';
+import { createClient as createRedisClient } from "redis";
+import RedisStoreFactory from 'connect-redis';
+import GameStore from './lib/game-store.js';
+import chalk from "chalk";
 
-const RedisStore = require('connect-redis')(session),
-    GameStore = require('./lib/GameStore');
-
-const redisClient = redis.createClient({legacyMode: true});
+const redisClient = createRedisClient({legacyMode: true});
 redisClient.on("error", (err) => console.log(err));
 redisClient.connect().catch(console.error)
 
 const app = express(),
-    server = http.createServer(app),
-    io = new socket.Server(server),
+    server = createHttpServer(app),
+    io = new SocketServer(server),
     db = new GameStore();
 
 //Settings
-app.set('port', process.env.app_port || 8080);
-app.set('views', __dirname + '/views');
+const port = process.env.app_port || 8080;
+app.set('port', port);
+app.set('views', './views');
 app.set('view engine', 'pug');
 
+const RedisStore = RedisStoreFactory(session);
 const sessionStore = new RedisStore({client: redisClient});
 const sessionInstance = session({
     secret: process.env.session_secret,
@@ -40,10 +40,12 @@ const sessionInstance = session({
 app.use(sessionInstance);
 app.use(bodyParser.urlencoded({extended: null}));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.resolve('public')));
+
+const host = process.env.app_host || 'http://127.0.0.1';
 
 const allowCrossDomain = function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost" || "http://127.0.0.1");
+    res.header("Access-Control-Allow-Origin", host);
     res.header("Access-Control-Allow-Methods", "GET,POST");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     res.header("Access-Control-Allow-Credentials", "true");
@@ -56,9 +58,10 @@ const wrap = middleware => (socket, next) => middleware(socket.request, {}, next
 
 io.use(wrap(sessionInstance));
 
-httpRoutes.attach(app, db);
-socketRoutes.attach(io, db);
+httpRoutes(app, db);
+socketRoutes(io, db);
 
 server.listen(app.get('port'), function() {
-    console.log("Five has started");
+    console.log(chalk.yellowBright("Five game has started"));
+    console.log("Open - " + chalk.blueBright(host + ':' + port));
 });

@@ -1,19 +1,21 @@
-/**
- * Created by alex on 8/7/14.
- */
-var DB = null;
+import { v4 as uuidv4 } from 'uuid';
+import { customAlphabet } from 'nanoid'
 
-function validateStartGame(req) {
+let DB = null;
+
+const validateStartGame = (req) => {
     if (!req.session.playerId) {
         return null;
     }
 
     return {
-        playerId: req.session.playerId
+        ownerId: req.session.playerId,
+        title: 'Game by ' + req.session.nickname,
+        nickname: req.session.nickname
     };
 }
 
-function validateJoinGame(req) {
+const validateJoinGame = (req) => {
     if (!req.query.gameId) {
         console.log('Game id not in query');
         return null;
@@ -24,18 +26,18 @@ function validateJoinGame(req) {
         return null;
     }
 
-    var game = DB.find(req.query.gameId);
-    if (!game) {
+    if (!DB.exists(req.query.gameId)) {
         return false;
     }
 
     return {
         gameId: req.query.gameId,
-        playerId: req.session.playerId
+        playerId: req.session.playerId,
+        nickname: req.session.nickname
     }
 }
 
-function validateGame(req) {
+const validateGame = (req) => {
     if (!req.session.gameId) {
         console.log('Game id not in session');
         return null;
@@ -58,37 +60,46 @@ function validateGame(req) {
 
     return {
         gameId: req.session.gameId,
-        playerId: req.session.playerId
+        playerId: req.session.playerId,
+        nickname: req.session.nickname
     };
 }
 
-function home(req, res) {
-    if (!req.session.playerId && req.method === 'POST' && req.body.id) {
-        req.session.playerId = req.body.id;
+const home = (req, res) => {
+    if (!req.session.playerId && req.method === 'POST') {
+        const playerId = uuidv4();
+        const nanoid = customAlphabet('1234567890abcdef', 8);
+
+        let nickname = req.body.name;
+        if (nickname === '') {
+            nickname = playerId;
+        }
+        req.session.nickname = nickname + " #" + nanoid();
+        req.session.playerId = playerId;
         res.redirect('/');
         return;
     }
 
-    var games = DB.getGames();
-    var list = [];
-    for(var i in games) {
+    const games = DB.games;
+    const list = [];
+    for (let i in games) {
         if (!games[i].winner) {
             list.push({
                 gameId: i,
-                title: games[i].ownerId,
+                title: games[i].title,
                 busy: games[i].getTotalPlaces() - games[i].getEmptyPlaces(),
                 total: games[i].getTotalPlaces()
             });
         }
     }
 
-    var playerId = req.session.playerId;
+    const playerId = req.session.playerId;
 
-    res.render('index', {list: list, playerId: playerId});
+    res.render('index', {games: list, playerId: playerId});
 }
 
-function startGame(req, res) {
-    var gameParams = validateStartGame(req);
+const startGame = (req, res) => {
+    const gameParams = validateStartGame(req);
     console.log(gameParams);
     if (!gameParams) {
         console.log("Invalid start game")
@@ -96,16 +107,18 @@ function startGame(req, res) {
         return;
     }
 
-    var gameId = DB.add(gameParams);
+    const gameId = DB.add(gameParams);
 
     req.session.gameId = gameId;
-    req.session.playerId = gameParams.playerId;
+    req.session.playerId = gameParams.ownerId;
+    req.session.nickname = gameParams.nickname
     console.log('Redirecting to game: ' + gameId);
     res.redirect('/game/' + gameId);
 }
 
-function joinGame(req, res) {
-    var validData = validateJoinGame(req);
+const joinGame = (req, res) => {
+    const validData = validateJoinGame(req);
+    console.log(validData);
 
     if (!validData) {
         console.log('Invalid join data');
@@ -113,8 +126,7 @@ function joinGame(req, res) {
         return;
     }
 
-    var game = DB.find(validData.gameId);
-    if (!game) {
+    if (!DB.exists(validData.gameId)) {
         console.log('Game not found');
         res.redirect('/');
         return;
@@ -122,32 +134,33 @@ function joinGame(req, res) {
 
     req.session.gameId = validData.gameId;
     req.session.playerId = validData.playerId;
+    req.session.nickname = validData.nickname;
 
     res.redirect('/game/' + validData.gameId);
 }
 
-function game(req, res) {
-    var validData = validateGame(req);
+const game = (req, res) => {
+    const validData = validateGame(req);
     if (!validData) {
         console.log("Invalid game")
-        res.redirect('/'); return;
+        res.redirect('/');
+        return;
     }
 
     // Render the game page
     res.render('game', validData);
 }
 
-function logout(req, res) {
+const logout = (req, res) => {
     req.session.destroy();
     res.redirect('/');
-    return;
 }
 
-function invalid(req, res) {
+const invalid = (req, res) => {
     res.redirect('/');
 }
 
-exports.attach = function(app, db) {
+export default (app, db) => {
     DB = db;
 
     app.get('/', home);

@@ -36,6 +36,7 @@ block content
                         .content
                     .graveyard
                         .content
+                .nickname
                 .hand
                     .content
                 .table
@@ -50,13 +51,14 @@ block content
                     .content
                 .hand
                     .content
+                .nickname
                 .clearfix
         div#right
             div#log
                 div.home
                     a(href="/") Home
                 div.title Log
-                div.content
+                ul.content
             button#end-turn End your turn
             div#stack
                 div.title
@@ -72,7 +74,7 @@ block content
     script.
         $(function() {
             FastClick.attach(document.body);
-            window.Client({
+            Client({
                 gameId : "#{gameId}",
                 playerId : "#{playerId}"
             });

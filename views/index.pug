@@ -10,12 +10,12 @@ block content
                 br
                 a(href="/logout") Logout
             ul
-              each item in list
+              each item in games
                 li
-                    a(href='/join?gameId=' + item.gameId) Player #{item.title} - Game #{item.gameId} #{item.busy}/#{item.total}
+                    a(href='/join?gameId=' + item.gameId) #{item.title} - ID: #{item.gameId} (#{item.busy}/#{item.total})
         else
             form(method="POST")
-                input(type="number", name="id")
-                input(type="submit", value="Set ID")
+                input(type="text", name="name")
+                input(type="submit", value="Set nickname")
 
 

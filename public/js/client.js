@@ -1,29 +1,25 @@
-/**
- * Created by alex on 8/1/14.
- */
-var CardType = {
+const CardType = {
+    ONE: 1,
+    TWO: 2,
+    THREE: 3,
+    FOUR: 4,
+    FIVE: 5
 };
 
-CardType.ONE = 1;
-CardType.TWO = 2;
-CardType.THREE = 3;
-CardType.FOUR = 4;
-CardType.FIVE = 5;
+const Client = (() => {
+    let socket = null;
+    let gameState = null;
+    let playerState = null;
+    let gameId = null;
+    let playerId = null;
+    let container = null;
+    let playerBottomContainer = null;
+    let playerTopContainer = null;
+    let stackContainer = null;
+    let logContainer = null;
+    let doubleClickTimers = {};
 
-var Client = (function(window) {
-    var socket = null;
-    var gameState = null;
-    var playerState = null;
-    var gameId = null;
-    var playerId = null;
-    var container = null;
-    var playerBottomContainer = null;
-    var playerTopContainer = null;
-    var stackContainer = null;
-    var logContainer = null;
-    var doubleClickTimers = {};
-
-    var init = function(config) {
+    const init = function(config) {
         container = $('#game');
         playerBottomContainer = $('#game #player-bottom');
         playerTopContainer = $('#game #player-top');
@@ -39,7 +35,7 @@ var Client = (function(window) {
         socket.emit('join', gameId);
     }
 
-    var doubleClickEmulate = function(name, delay, callback) {
+    const doubleClickEmulate = function(name, delay, callback) {
         if (typeof doubleClickTimers[name] === 'undefined') {
             console.log('dblclick emulate 1');
             doubleClickTimers[name] = setTimeout(function() {
@@ -54,10 +50,10 @@ var Client = (function(window) {
         }
     }
 
-    var attachDOMEventHandlers = function() {
+    const attachDOMEventHandlers = function() {
         container.on('click', '#player-bottom .hand .card', function(e) {
             e.preventDefault();
-            var self = this;
+            const self = this;
             doubleClickEmulate('playCard', 600, function() {
                 playCard(self);
             });
@@ -65,7 +61,7 @@ var Client = (function(window) {
 
         container.on('click', '#player-bottom .hand .card', function(e) {
             e.preventDefault();                        
-            var self = this;
+            const self = this;
             doubleClickEmulate('cleanup', 600, function() {
                 cleanup(self);
             });
@@ -92,7 +88,7 @@ var Client = (function(window) {
         })
     }
 
-    var attachSocketEventHandlers = function() {
+    const attachSocketEventHandlers = function() {
         socket.on('update', function(data) {
             console.log(data);
             gameState = data;
@@ -103,6 +99,7 @@ var Client = (function(window) {
             console.log('Update player');
             console.log(data);
             playerState = data;
+
             updatePlayer();
         });
 
@@ -128,7 +125,6 @@ var Client = (function(window) {
         socket.on('start', function(data) {
             console.log('Game started');
             gameState = data;
-            //start();
             update();
         });
 
@@ -137,21 +133,21 @@ var Client = (function(window) {
         });
     }
 
-    var cleanup = function(cardElement) {
+    const cleanup = function(cardElement) {
         if (gameState.cleanup === 0) {
             return false;
         }
 
-        var $card = $(cardElement);
+        const $card = $(cardElement);
         socket.emit('action', {gameId: gameId, action: 'cleanup', data: {cardId: $card.data('id')}});
     }
 
-    var resolveTrigger = function(cardElement) {
+    const resolveTrigger = function(cardElement) {
         if (!gameState.triggerInfo) {
             return false;
         }
-        var $card = $(cardElement);
-        var cardId = null;
+        const $card = $(cardElement);
+        let cardId = null;
         if ($card.hasClass('destroy') && gameState.triggerInfo.area === 'table') {
             cardId = $card.data('id');
         }
@@ -169,14 +165,14 @@ var Client = (function(window) {
         }
     }
 
-    var tryDeny = function() {
+    const tryDeny = function() {
         if (!gameState.stackCard) {
             return false;
         }
-        var playerHand = playerState.hand.cards;
-        var counterId = null;
-        var cardId = null;
-        for(var i in playerHand) {
+        const playerHand = playerState.hand.cards;
+        let counterId = null;
+        let cardId = null;
+        for (let i in playerHand) {
             if (!counterId && playerHand[i].type === CardType.FIVE) {
                 counterId = playerHand[i].id;
                 continue;
@@ -194,65 +190,52 @@ var Client = (function(window) {
         if (counterId && cardId) {
             socket.emit('action', {gameId: gameId, action: 'deny', data: {counterId: counterId, cardId: cardId}});
         } else {
-            var helperContainer = stackContainer.find('.helper');
+            const helperContainer = stackContainer.find('.helper');
             helperContainer.empty();
-            var helper = $('#template-stack-helper-counter-error').html();
+            const helper = $('#template-stack-helper-counter-error').html();
             $(Mustache.render(helper)).appendTo(helperContainer);
         }
-
-        /* var helperContainer = stackContainer.find('.helper');
-        helperContainer.empty();
-        if (haveTwoCards) {
-            var helper = $('#template-stack-helper-counter').html();
-            playerBottomContainer.find('.hand .content .card').addClass('fog');
-            playerBottomContainer.
-                find('.hand .content .card.type-' + CardType.FIVE + ', .hand .content .card.type-' + gameState.stackCard.card.type).
-                addClass('highlight').removeClass('fog');
-        } else {
-            var helper = $('#template-stack-helper-counter-error').html();
-        }
-        $(Mustache.render(helper)).appendTo(helperContainer); */
-
     }
 
-    var playCard = function(cardElement) {
+    const playCard = function(cardElement) {
         if (gameState.triggerInfo || gameState.stackCard || gameState.cleanup) {
             return false;
         }
 
         if (gameState.activePlayer === playerId) {
-            var e = $(cardElement);
-            var cardId = e.data('id');
+            const e = $(cardElement);
+            const cardId = e.data('id');
+            console.log(cardId);
             socket.emit('action', {gameId: gameId, action: 'play', data: {cardId: cardId}});
         }
     }
 
-    var renderCardsContainer = function(cards, container) {
+    const renderCardsContainer = function(cards, container) {
         container.empty();
-        for(var i in cards) {
+        for (let i in cards) {
             cards[i].index = i;
             $(renderCard(cards[i])).appendTo(container);
         }
     }
 
-    var renderCard = function(card) {
-        var template = $('#template-card').html();
+    const renderCard = function(card) {
+        const template = $('#template-card').html();
         return Mustache.render(template, card);
     }
 
-    var renderBackCardsContainer = function(count, container) {
+    const renderBackCardsContainer = function(count, container) {
         container.empty();
-        for(var i = 0; i < count; i++) {
+        for (let i = 0; i < count; i++) {
             $(renderBackCard()).appendTo(container);
         }
     }
 
-    var renderBackCard = function() {
-        var template = $('#template-back-card').html();
+    const renderBackCard = function() {
+        const template = $('#template-back-card').html();
         return Mustache.render(template);
     }
 
-    var update = function() {
+    const update = function() {
         stackContainer.find('.content').empty();
         stackContainer.find('.helper').empty();
         logContainer.empty();
@@ -265,20 +248,22 @@ var Client = (function(window) {
             }
         }
 
-        for(var i in gameState.players) {
+        for (let i in gameState.players) {
             if (gameState.players[i].id !== playerId) {
                 playerTopContainer.find('.library .content').text(gameState.players[i].librarySize);
                 renderBackCardsContainer(gameState.players[i].handSize, playerTopContainer.find('.hand .content'));
+                playerTopContainer.find('.nickname').text(gameState.players[i].nickname);
             } else {
                 playerBottomContainer.find('.library .content').text(gameState.players[i].librarySize);
+                playerBottomContainer.find('.nickname').text(gameState.players[i].nickname);
             }
 
-            var tableContainer = gameState.players[i].id !== playerId
+            const tableContainer = gameState.players[i].id !== playerId
                 ? playerTopContainer.find('.table .content')
                 : playerBottomContainer.find('.table .content');
             renderCardsContainer(gameState.players[i].table.cards, tableContainer);
 
-            var graveContainer = gameState.players[i].id !== playerId
+            const graveContainer = gameState.players[i].id !== playerId
                 ? playerTopContainer.find('.graveyard .content')
                 : playerBottomContainer.find('.graveyard .content');
             renderCardsContainer(gameState.players[i].graveyard.cards, graveContainer);
@@ -287,39 +272,41 @@ var Client = (function(window) {
                 $(renderCard(gameState.stackCard.card)).
                 appendTo(stackContainer.find('.content'));
             if (gameState.activePlayer === playerId) {
-                var helper = $('#template-stack-helper').clone();
+                const helper = $('#template-stack-helper').clone();
                 helper.removeClass('hidden').appendTo(stackContainer.find('.helper'));
             } else {
-                var helper = $('#template-stack-helper-waiting').clone();
+                const helper = $('#template-stack-helper-waiting').clone();
                 helper.removeClass('hidden').appendTo(stackContainer.find('.helper'));
             }
         }
 
+        const helperContainer = stackContainer.find('.helper');
+        let helper = null;
+
         if (gameState.triggerInfo) {
             if (gameState.triggerInfo.playerId === playerId) {
+
                 switch(gameState.triggerInfo.area) {
                     case 'hand':
                         //your hand
                         playerBottomContainer.
                             find('.hand .content .card').addClass('highlight').addClass('discard').removeClass('fog');
-                        var helperContainer = stackContainer.find('.helper');
-                        var helper = $('#template-trigger-helper-discard').html();
+
+                        helper = $('#template-trigger-helper-discard').html();
                         $(Mustache.render(helper)).appendTo(helperContainer);
                         break;
                     case 'graveyard':
                         //your graveyard
                         playerBottomContainer.
                             find('.graveyard .content .card').addClass('highlight').addClass('return').removeClass('fog');
-                        var helperContainer = stackContainer.find('.helper');
-                        var helper = $('#template-trigger-helper-return').html();
+                        helper = $('#template-trigger-helper-return').html();
                         $(Mustache.render(helper)).appendTo(helperContainer);
                         break;
                     case 'table':
                         //opponent's table
                         playerTopContainer.
                             find('.table .content .card').addClass('highlight').addClass('destroy').removeClass('fog');
-                        var helperContainer = stackContainer.find('.helper');
-                        var helper = $('#template-trigger-helper-destroy').html();
+                        helper = $('#template-trigger-helper-destroy').html();
                         $(Mustache.render(helper)).appendTo(helperContainer);
                         break;
                 }
@@ -333,8 +320,7 @@ var Client = (function(window) {
                     find('.hand .content .card').size());
                 playerBottomContainer.
                     find('.hand .content .card').addClass('highlight').addClass('cleanup');
-                var helperContainer = stackContainer.find('.helper');
-                var helper = $('#template-cleanup-helper').html();
+                helper = $('#template-cleanup-helper').html();
                 $(Mustache.render(helper)).appendTo(helperContainer);
             }
         }
@@ -346,30 +332,17 @@ var Client = (function(window) {
             $('#end-turn').removeClass('active');
         }
 
-        for(var l in gameState.log) {
-            $('<div></div>').text(gameState.log[l]).appendTo(logContainer);
+        for (let l in gameState.log) {
+            $('<li></li>').text(gameState.log[l]).appendTo(logContainer);
         }
         logContainer.scrollTop(logContainer.get(0).scrollHeight);
     }
 
-    var updatePlayer = function() {
-        var cards = playerState.hand.cards;
-        var handContent = playerBottomContainer.find('.hand .content');
+    const updatePlayer = function() {
+        const cards = playerState.hand.cards;
+        const handContent = playerBottomContainer.find('.hand .content');
         renderCardsContainer(cards, handContent);
     }
 
-    var start = function() {
-//        for(var i in gameState.players) {
-//            if (gameState.players[i].id !== playerId) {
-//                playerTopContainer.find('.library .content').text(gameState.players[i].librarySize);
-//                playerTopContainer.find('.hand .content').text(gameState.players[i].handSize);
-//                continue;
-//            }
-//
-//            playerBottomContainer.find('.library .content').text(gameState.players[i].librarySize);
-//            playerBottomContainer.find('.hand .content').text(gameState.players[i].handSize);
-//        }
-    }
-
     return init;
-}(window));
+})();
