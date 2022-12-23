@@ -1,24 +1,18 @@
-/**
- * Created by alex on 8/7/14.
- */
-const _ = require('underscore'),
-    Game = require('../lib/Game');
-
 let IO = null,
     DB = null;
 
 const join = function(gameId) {
     console.log('Trying to join game', gameId);
 
-    var sess = this.request.session;
-    var debugInfo = {
+    const session = this.request.session;
+    const debugInfo = {
         socketID : this.id,
         event : 'join',
         gameId : gameId,
-        session : sess
+        session : session
     };
 
-    var game = DB.find(sess.gameId);
+    const game = DB.find(session.gameId);
 
     if (!game) {
         console.log("ERROR: Game Not Found", debugInfo);
@@ -27,7 +21,7 @@ const join = function(gameId) {
         return;
     }
 
-    var result = game.addPlayer(sess);
+    const result = game.addPlayer(session);
     if (!result) {
         console.log('ERROR: Failed to Add Player', debugInfo);
         IO.sockets.in(gameId).emit('error', {message: "Unable to join game"});
@@ -37,13 +31,13 @@ const join = function(gameId) {
     this.join(gameId);
 
     // Emit the update event to everyone in this room/game
-    IO.sockets.in(gameId).emit('player join', game.getPublicInfo());
+    IO.sockets.in(gameId).emit('player join', game.publicInfo);
 
-    console.log(sess.playerId + ' joined ' + gameId);
+    console.log(session.playerId + ' joined ' + gameId);
 
     if (game.status === 'ongoing') {
-        var sockets = IO.sockets.in(gameId);
-        sockets.emit('start', game.getPublicInfo());
+        const sockets = IO.sockets.in(gameId);
+        sockets.emit('start', game.publicInfo);
         updateSocketsPrivateInfo(game, sockets).then(() => updateGame(game, sockets));
     }
 }
@@ -51,18 +45,17 @@ const join = function(gameId) {
 const updateSocketsPrivateInfo = async function(game, sockets) {
     const roomSockets = await sockets.fetchSockets();
     for (let i in roomSockets) {
-        console.log('Update player: ' + roomSockets[i].request.session.playerId);
         roomSockets[i].emit('update player', game.getPlayerInfo(roomSockets[i].request.session.playerId));
     }
 }
 
-var updateGame = function(game, sockets) {
-    sockets.emit('update', game.getPublicInfo());
+const updateGame = function(game, sockets) {
+    sockets.emit('update', game.publicInfo);
 }
 
-var action = function(data) {
-    var sess = this.request.session;
-    var debugInfo = {
+const action = function(data) {
+    const sess = this.request.session;
+    const debugInfo = {
         socketID : this.id,
         event : 'action',
         session : sess
@@ -75,11 +68,11 @@ var action = function(data) {
         return;
     }
 
-    var actionData = data.data;
+    const actionData = data.data;
 
     try {
         console.log("Action", data);
-        var result = game.callAction(sess.playerId, data.action, actionData);
+        const result = game.callAction(sess.playerId, data.action, actionData);
         if (!result) {
             this.emit('invalid action', {message: 'Invalid action'});
             return;
@@ -90,21 +83,20 @@ var action = function(data) {
         return;
     }
 
-    updateSocketsPrivateInfo(game, IO.sockets.in(sess.gameId));
-    updateGame(game, IO.sockets.in(sess.gameId));
+    updateSocketsPrivateInfo(game, IO.sockets.in(sess.gameId)).then(() => updateGame(game, IO.sockets.in(sess.gameId)));
 }
 
-var close = function() {
+const close = function() {
     console.log('close');
-    var sess = this.request.session;
-    var debugInfo = {
+    const session = this.request.session;
+    const debugInfo = {
         socketID : this.id,
         event : 'close',
-        session : sess
+        session : session
     };
 
     // Lookup game in database
-    var game = DB.find(sess.gameId);
+    const game = DB.find(session.gameId);
 
     if (!game) {
         console.log('ERROR: Game Not Found', debugInfo);
@@ -112,18 +104,18 @@ var close = function() {
         return;
     }
     // Remove player from game
-    var result = game.removePlayer(sess);
+    const result = game.removePlayer(session);
     if (!result) {
-        console.log('ERROR: ' + sess.playerId + ' failed to leave ' + sess.gameId);
+        console.log('ERROR: ' + session.playerId + ' failed to leave ' + session.gameId);
         return;
     }
 
-    IO.sockets.in(sess.gameId).emit('close', sess.playerId);
-    console.log(sess.playerId + ' left ' + sess.gameId);
+    IO.sockets.in(session.gameId).emit('close', session.playerId);
+    console.log(session.playerId + ' left ' + session.gameId);
     console.log('Socket ' + this.id + ' disconnected');
 }
 
-exports.attach = function(io, db) {
+export default function(io, db) {
     IO = io;
     DB = db;
 

@@ -257,6 +257,12 @@ button#end-turn.active {
 #game #left .player#player-top {
   border-bottom: 5px solid #fff;
 }
+#game #left .player .nickname {
+  font-weight: bold;
+  font-size: 24px;
+  float: left;
+  width: 80%;
+}
 #game #left .player .table {
   width: 80%;
   float: left;
@@ -309,7 +315,7 @@ button#end-turn.active {
   margin-top: 50px;
 }
 #game #right #log {
-  height: 200px;
+  height: 400px;
 }
 #game #right #log .content {
   overflow: hidden;

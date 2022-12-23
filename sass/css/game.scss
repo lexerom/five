@@ -267,6 +267,12 @@ button#end-turn {
       &#player-top {
         border-bottom: 5px solid #fff;
       }
+      .nickname {
+        font-weight: bold;
+        font-size: 24px;
+        float: left;
+        width: 80%;
+      }
       .table {
         width: 80%;
         float: left;
@@ -320,7 +326,7 @@ button#end-turn {
       margin-top: 50px;
     }
     #log {
-      height: 200px;
+      height: 400px;
       .content {
         overflow: hidden;
         overflow-y: auto;
